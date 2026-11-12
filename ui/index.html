@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' file: data:; script-src 'self'; style-src 'self'; img-src 'self' data: file:; media-src 'self' file: blob:; connect-src 'none'; object-src 'none'; frame-src 'none'" />
+  <title>NOVA MEDIA PLAYER</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <svg class="svg-icons" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="m8 5 11 7-11 7V5Z" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16" rx="1" fill="currentColor" stroke="none"/><rect x="14" y="4" width="4" height="16" rx="1" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-forward" viewBox="0 0 24 24"><path d="m5 5 9 7-9 7V5ZM15 5v14"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="m19 5-9 7 9 7V5ZM9 5v14"/></symbol>
+    <symbol id="i-music" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13M9 18a3 3 0 1 1-3-3c1.7 0 3 1.3 3 3ZM21 16a3 3 0 1 1-3-3c1.7 0 3 1.3 3 3Z"/></symbol>
+    <symbol id="i-film" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M7 4v16M17 4v16M3 9h4m-4 6h4m10-6h4m-4 6h4"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.8 4.9a5.6 5.6 0 0 0-7.9 0L12 5.8l-.9-.9a5.6 5.6 0 0 0-7.9 7.9L12 21l8.8-8.2a5.6 5.6 0 0 0 0-7.9Z"/></symbol>
+    <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Z"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m16 16 5 5"/></symbol>
+    <symbol id="i-queue" viewBox="0 0 24 24"><path d="M4 6h12M4 12h12M4 18h8m5-3 4 3-4 3v-6Z"/></symbol>
+    <symbol id="i-shuffle" viewBox="0 0 24 24"><path d="M17 3h4v4M3 17l5-5m4-4 9-5M17 21h4v-4M3 7l5 5m4 4 9 5"/></symbol>
+    <symbol id="i-repeat" viewBox="0 0 24 24"><path d="m17 2 4 4-4 4M3 11V9a3 3 0 0 1 3-3h15M7 22l-4-4 4-4m14-1v2a3 3 0 0 1-3 3H3"/></symbol>
+    <symbol id="i-volume" viewBox="0 0 24 24"><path d="M11 5 6 9H3v6h3l5 4V5Zm4 3a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/></symbol>
+    <symbol id="i-mute" viewBox="0 0 24 24"><path d="M11 5 6 9H3v6h3l5 4V5Zm5 4 5 6m0-6-5 6"/></symbol>
+    <symbol id="i-expand" viewBox="0 0 24 24"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></symbol>
+    <symbol id="i-pip" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><rect x="11" y="11" width="8" height="7" rx="1"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3m3 0-1 13H7L6 7m4 4v6m4-6v6"/></symbol>
+    <symbol id="i-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></symbol>
+    <symbol id="i-disc" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/><path d="M12 3c5 0 9 4 9 9"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 5 5L20 7"/></symbol>
+  </svg>
+  <div id="app" class="app">
+    <aside class="sidebar">
+      <div class="brand"><div class="brand-mark"><svg><use href="#i-play"/></svg></div><div><strong>NOVA<span>PLAYER</span></strong><small>MEDIA PLAYER 1.0</small></div></div>
+      <div class="sidebar-caption">TWOJA PRZESTRZEŃ</div>
+      <nav class="nav" aria-label="Biblioteka">
+        <button class="nav-link active" data-filter="all"><svg><use href="#i-grid"/></svg><span>Wszystkie media</span><span id="countAll" class="nav-count">0</span></button>
+        <button class="nav-link" data-filter="audio"><svg><use href="#i-music"/></svg><span>Muzyka</span></button>
+        <button class="nav-link" data-filter="video"><svg><use href="#i-film"/></svg><span>Filmy</span></button>
+        <button class="nav-link" data-filter="favorites"><svg><use href="#i-heart"/></svg><span>Ulubione</span></button>
+      </nav>
+      <div class="sidebar-caption caption-second">DODAWANIE</div>
+      <div class="sidebar-actions">
+        <button id="sideFiles" class="sidebar-action"><svg><use href="#i-plus"/></svg><span>Dodaj pliki</span></button>
+        <button id="sideFolder" class="sidebar-action"><svg><use href="#i-folder"/></svg><span>Dodaj folder</span></button>
+      </div>
+      <div class="sidebar-bottom"><div class="offline-dot"></div><div><strong>Muzyka bez granic</strong><span>Twoje pliki • Offline</span></div></div>
+    </aside>
+    <main class="main">
+      <header class="topbar">
+        <div class="crumb"><span class="crumb-dot"></span> BIBLIOTEKA <span class="crumb-sep">/</span> <span id="filterTitle">Wszystkie media</span></div>
+        <div class="top-actions">
+          <div class="search-wrap"><svg><use href="#i-search"/></svg><input id="search" aria-label="Szukaj plików" placeholder="Szukaj muzyki i filmów..." autocomplete="off" /></div>
+          <button class="primary small" id="topFiles"><svg><use href="#i-plus"/></svg> Dodaj media</button>
+        </div>
+      </header>
+      <div class="scroll-content">
+        <div class="section-head"><div><div class="eyebrow"><span class="accent-line"></span> TWOJE CENTRUM ROZRYWKI</div><h1>Twój świat mediów<span>.</span></h1><p>Odkrywaj, odtwarzaj i ciesz się każdą chwilą.</p></div><div class="status-badge"><span></span> GOTOWY DO ODTWARZANIA</div></div>
+        <section id="stage" class="media-stage empty" aria-label="Odtwarzacz">
+          <div class="stage-glow"></div><div class="stage-grid"></div>
+          <div class="stage-placeholder" id="stagePlaceholder"><div class="disc-halo"><div class="disc-outer"><div class="disc-inner"><svg><use href="#i-play"/></svg></div></div></div><h2 id="stageLabel">Twoje multimedia. Twój rytm.</h2><p id="stageDescription">Dodaj ulubione utwory i filmy, aby rozpocząć.</p><button id="stageAdd" class="primary"><svg><use href="#i-plus"/></svg> Wybierz pierwsze pliki</button></div>
+          <video id="video" preload="metadata" playsinline></video>
+          <div class="video-veil" id="videoVeil"></div>
+          <div class="stage-stamp" id="stageStamp">NOVA <b>PLAYER</b></div>
+        </section>
+        <section class="library-section"><div class="list-header"><div><div class="eyebrow">TWOJA KOLEKCJA</div><h2 id="listTitle">Biblioteka multimediów</h2></div><div class="list-tools"><span id="listCount" class="list-count">0 pozycji</span><button class="icon-button subtle" id="clearLibrary" title="Wyczyść bibliotekę" aria-label="Wyczyść bibliotekę"><svg><use href="#i-trash"/></svg></button></div></div>
+          <div class="track-head"><span>UTWÓR / FILM</span><span>TYP</span><span>ROZMIAR</span><span></span></div>
+          <div id="libraryList" class="library-list"></div>
+          <div id="emptyList" class="empty-list"><svg><use href="#i-folder"/></svg><h3>Twoja biblioteka czeka</h3><p>Dodaj pliki muzyczne lub folder z filmami.</p></div>
+        </section>
+      </div>
+    </main>
+    <aside class="queue-panel"><div class="queue-header"><div class="queue-heading"><svg><use href="#i-queue"/></svg><h2>Kolejka</h2></div><span class="queue-label" id="queueCount">0 UTWORÓW</span></div>
+      <div class="queue-caption">TERAZ ODTWARZANE</div><div id="currentCard" class="current-card"><div class="cover-small"><svg><use href="#i-disc"/></svg></div><div><strong>Jeszcze nic nie gra</strong><span>Dodaj media do biblioteki</span></div></div>
+      <div class="queue-subheading">NA LIŚCIE <span id="queueMiniCount">0</span></div>
+      <div class="queue-scroll" id="queueList"><p class="queue-empty">Wybrane multimedia pojawią się tutaj.</p></div>
+      <div class="queue-foot"><div class="queue-foot-icon"><svg><use href="#i-music"/></svg></div><div><b>Cała kolekcja</b><span>W jednym miejscu.</span></div></div>
+    </aside>
+    <footer class="player-bar">
+      <div class="track-now"><div id="footerCover" class="footer-cover"><svg><use href="#i-music"/></svg></div><div class="track-meta"><strong id="currentTitle">Nic nie odtwarzasz</strong><span id="currentSubtitle">NOVA MEDIA PLAYER</span></div><button class="icon-button heart" id="favoriteCurrent" aria-label="Dodaj do ulubionych" title="Ulubione"><svg><use href="#i-heart"/></svg></button></div>
+      <div class="play-area"><div class="transport"><button class="icon-button" id="shuffle" aria-label="Odtwarzanie losowe" title="Losowo"><svg><use href="#i-shuffle"/></svg></button><button class="icon-button" id="previous" aria-label="Poprzedni" title="Poprzedni"><svg><use href="#i-back"/></svg></button><button class="play-button" id="playPause" aria-label="Odtwórz" title="Odtwórz / pauza"><svg><use href="#i-play"/></svg></button><button class="icon-button" id="next" aria-label="Następny" title="Następny"><svg><use href="#i-forward"/></svg></button><button class="icon-button" id="repeat" aria-label="Powtarzanie" title="Powtarzanie: wyłączone"><svg><use href="#i-repeat"/></svg><span id="repeatOne" class="repeat-one">1</span></button></div><div class="timeline"><span id="elapsed">0:00</span><input id="progress" type="range" min="0" max="1000" value="0" aria-label="Postęp odtwarzania"/><span id="duration">0:00</span></div></div>
+      <div class="play-extras"><button id="speed" class="speed-button" title="Prędkość odtwarzania">1×</button><button id="pip" class="icon-button" title="Obraz w obrazie" aria-label="Obraz w obrazie"><svg><use href="#i-pip"/></svg></button><button id="volumeButton" class="icon-button" title="Wycisz" aria-label="Wycisz"><svg><use href="#i-volume"/></svg></button><input id="volume" type="range" min="0" max="100" value="80" aria-label="Głośność"/><button id="fullscreen" class="icon-button" title="Pełny ekran" aria-label="Pełny ekran"><svg><use href="#i-expand"/></svg></button></div>
+    </footer>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
