@@ -5,7 +5,17 @@ const path = require('node:path');
 const {collectFiles, scanDirectory, sanitizeState} = require('./library');
 
 let mainWindow;
-let initialArgs = [];
+let pendingExternalFiles = [];
+let rendererReady = false;
+
+// Never deliver startup file paths before the renderer has finished restoring the library.
+function flushPendingFiles() {
+  if (!rendererReady || !mainWindow || mainWindow.isDestroyed() ||
+      mainWindow.webContents.isLoading() || !pendingExternalFiles.length) return;
+  const files = collectFiles(pendingExternalFiles);
+  pendingExternalFiles = [];
+  if (files.length) mainWindow.webContents.send('external-files', files);
+}
 const statePath = () => path.join(app.getPath('userData'), 'player-state.json');
 
 function readState() {
@@ -22,6 +32,7 @@ function writeState(raw) {
   return true;
 }
 function createWindow() {
+  rendererReady = false;
   mainWindow = new BrowserWindow({
     width: 1340, height: 860, minWidth: 890, minHeight: 570,
     backgroundColor: '#0b0e1b', show: false,
@@ -40,12 +51,7 @@ function createWindow() {
   mainWindow.once('ready-to-show', () => mainWindow.show());
   mainWindow.webContents.setWindowOpenHandler(() => ({action: 'deny'}));
   mainWindow.webContents.on('will-navigate', event => event.preventDefault());
-  mainWindow.webContents.on('did-finish-load', () => {
-    if (initialArgs.length) {
-      mainWindow.webContents.send('external-files', collectFiles(initialArgs));
-      initialArgs = [];
-    }
-  });
+  mainWindow.webContents.on('did-finish-load', flushPendingFiles);
 }
 
 if (!app.requestSingleInstanceLock()) {
@@ -53,10 +59,11 @@ if (!app.requestSingleInstanceLock()) {
 } else {
   app.on('second-instance', (_event, argv) => {
     const files = collectFiles(argv.filter(v => !v.startsWith('--')));
+    if (files.length) pendingExternalFiles.push(...files.map(item => item.id));
     if (mainWindow) {
       if (mainWindow.isMinimized()) mainWindow.restore();
       mainWindow.focus();
-      if (files.length) mainWindow.webContents.send('external-files', files);
+      flushPendingFiles();
     }
   });
 }
@@ -64,7 +71,12 @@ if (!app.requestSingleInstanceLock()) {
 app.whenReady().then(() => {
   nativeTheme.themeSource = 'dark';
   app.setAppUserModelId('com.nova.mediaplayer');
-  initialArgs = process.argv.slice(app.isPackaged ? 1 : 2).filter(v => !v.startsWith('--'));
+  pendingExternalFiles.push(...process.argv.slice(app.isPackaged ? 1 : 2).filter(v => !v.startsWith('--')));
+  ipcMain.handle('renderer-ready', () => {
+    rendererReady = true;
+    flushPendingFiles();
+    return true;
+  });
   ipcMain.handle('open-files', async () => {
     const result = await dialog.showOpenDialog(mainWindow, {
       title: 'Wybierz muzykę lub filmy',

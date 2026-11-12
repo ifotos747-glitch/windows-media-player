@@ -8,5 +8,6 @@ contextBridge.exposeInMainWorld('nova', {
   save: data => ipcRenderer.invoke('save-library', data),
   showFile: path => ipcRenderer.invoke('show-file', path),
   filePaths: files => Array.from(files).map(file => webUtils.getPathForFile(file)).filter(Boolean),
-  onExternalFiles: callback => ipcRenderer.on('external-files', (_event, files) => callback(files))
+  onExternalFiles: callback => ipcRenderer.on('external-files', (_event, files) => callback(files)),
+  readyForFiles: () => ipcRenderer.invoke('renderer-ready')
 });

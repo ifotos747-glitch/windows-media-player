@@ -9,8 +9,8 @@
     "start": "electron .",
     "test": "node --test tests/*.test.js",
     "check": "node --check src/main.js && node --check src/preload.js && node --check src/library.js && node --check ui/app.js && npm test",
-    "build:windows": "electron-builder --win nsis --win portable --x64",
-    "build:dir": "electron-builder --win dir --x64",
+    "build:windows": "electron-builder --win nsis --win portable --x64 --publish never",
+    "build:dir": "electron-builder --win dir --x64 --publish never",
     "prestart": "node scripts/generate-icons.js",
     "prebuild:windows": "node scripts/generate-icons.js",
     "prebuild:dir": "node scripts/generate-icons.js"

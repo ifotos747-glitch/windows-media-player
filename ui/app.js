@@ -145,7 +145,7 @@ function addItems(newItems) {
 async function addFiles(){if(!api){notify('Uruchom aplikację przez Electron, aby otwierać pliki.');return;}try{const picked=await api.openFiles();if(picked.length)addItems(picked);}catch{notify('Nie udało się otworzyć plików.');}}
 async function addFolder(){if(!api){notify('Funkcja dostępna w aplikacji Windows.');return;}try{const picked=await api.openFolder();addItems(picked);}catch{notify('Nie udało się odczytać folderu.');}}
 function removeItem(id){const index=items.findIndex(x=>x.id===id);if(index<0)return;const wasCurrent=id===currentId;items.splice(index,1);favorites.delete(id);if(wasCurrent){video.pause();video.removeAttribute('src');video.load();currentId=null;const next=items[Math.min(index,items.length-1)];if(next)selectItem(next.id,false);}updateCounts();syncCurrent();renderLibrary();renderQueue();store();}
-function clearLibrary(){if(!items.length)return;if(!window.confirm('Usunąć wszystkie pozycje z biblioteki? Pliki na dysku nie zostaną usunięte.'))return;video.pause();video.removeAttribute('src');video.load();items=[];currentId=null;history=[];updateCounts();syncCurrent();syncProgress();renderLibrary();renderQueue();store();notify('Biblioteka została wyczyszczona.');}
+function clearLibrary(){if(!items.length)return;if(!window.confirm('Usunąć wszystkie pozycje z biblioteki? Pliki na dysku nie zostaną usunięte.'))return;video.pause();video.removeAttribute('src');video.load();items=[];currentId=null;history=[];favorites.clear();updateCounts();syncCurrent();syncProgress();renderLibrary();renderQueue();store();notify('Biblioteka została wyczyszczona.');}
 function toggleFavorite(id){if(!id)return;if(favorites.has(id))favorites.delete(id);else favorites.add(id);syncCurrent();renderLibrary();store();}
 async function togglePlay(){if(!getCurrent()){if(items.length)await selectItem(items[0].id,true);else addFiles();return;}if(video.paused){try{await video.play();}catch{notify('Nie udało się odtworzyć pliku. Format lub kodek może być nieobsługiwany.');}}else video.pause();}
 function getNextId(isAutomatic=false) {
@@ -208,6 +208,7 @@ function attachEvents(){
 async function initialize(){
   attachEvents();
   if(api){
+    api.onExternalFiles(addItems);
     try{
       const result=await api.restore();
       items=result.items||[];
@@ -224,8 +225,8 @@ async function initialize(){
       $('repeatOne').classList.toggle('visible',repeat==='one');
       updateCounts();renderLibrary();renderQueue();
       if(items.length){const id=items.some(x=>x.id===state.current)?state.current:items[0].id;selectItem(id,false,state.lastTime||0);}
-      api.onExternalFiles(addItems);
     }catch{notify('Nie udało się wczytać poprzedniej biblioteki.');}
+    finally { api.readyForFiles().catch(()=>notify('Nie udało się wczytać plików startowych.')); }
   }
   updateCounts();renderLibrary();renderQueue();syncCurrent();syncProgress();
 }
